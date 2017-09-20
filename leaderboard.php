@@ -107,7 +107,7 @@
             //If something goes wrong while interacting with the database, we will give an error
             //It might be a good idea to put the details in a seperate log file and just tell
             //the user that an error occured. Otherwise you might leak information you don't want to
-            echo "Error!: " . $e->getMessage() . "<br/>";
+            echo "Leaderboard is not currently available, please check back later<br/>";
             die();
         }
 		

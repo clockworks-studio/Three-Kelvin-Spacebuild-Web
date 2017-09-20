@@ -34,18 +34,59 @@
 		}
 		</style>
 	</head>
-<div class="postlight">
-    <h1 class="header">[Post Title]</h1>
-    <small class="smalltext">Posted on [datestamp] by [Author]</small>
-    <p>Lorem ipsum dolor sit amet, nonumes voluptatum mel ea, cu case ceteros cum. Novum commodo malorum vix ut. Dolores consequuntur in ius, sale electram dissentiunt quo te. Cu duo omnes invidunt, eos eu mucius fabellas. Stet facilis ius te, quando voluptatibus eos in. Ad vix mundi alterum, integre urbanitas intellegam vix in.</p>
-    <p>Eum facete intellegat ei, ut mazim melius usu. Has elit simul primis ne, regione minimum id cum. Sea deleniti dissentiet ea. Illud mollis moderatius ut per, at qui ubique populo. Eum ad cibo legimus, vim ei quidam fastidii.</p>
-    <p>Quo debet vivendo ex. Qui ut admodum senserit partiendo. Id adipiscing disputando eam, sea id magna pertinax concludaturque. Ex ignota epicurei quo, his ex doctus delenit fabellas, erat timeam cotidieque sit in. Vel eu soleat voluptatibus, cum cu exerci mediocritatem. Malis legere at per, has brute putant animal et, in consul utamur usu.</p>
-    <p>Te has amet modo perfecto, te eum mucius conclusionemque, mel te erat deterruisset. Duo ceteros phaedrum id, ornatus postulant in sea. His at autem inani volutpat. Tollit possit in pri, platonem persecuti ad vix, vel nisl albucius gloriatur no.</p>
-    <p>Ea duo atqui incorrupte, sed rebum regione suscipit ex, mea ex dicant percipit referrentur. Dicat luptatum constituam vix ut. His vide platonem omittantur id, vel quis vocent an. Ad pro inani zril omnesque. Mollis forensibus sea an, vim habeo adipisci contentiones ad, tale autem graecis ne sit.</p>
-</div>
-<div class="postdark">
-    <h1 class="header">[Post Title]</h1>
-    <small class="smalltext">Posted on [datestamp] by [Author]</small>
-    <p>[Content]</p>
-</div>
+    <?php
+        //Database information (assuming database.php is located in parent directory)
+        require '../database.php';
+        
+        try
+        {
+            //Try to get a connection
+            $pdo = new PDO('mysql:host='.$mysql_host.';dbname='.$mysql_database, $mysql_user, $mysql_pass);
+            
+            $stmt = $pdo->prepare("SELECT time_posted, title, author, content FROM info_posts WHERE info_posts.visible = 1 ORDER BY time_posted DESC");
+            $stmt->execute();
+            $posts = $stmt->fetchAll();
+            
+            if(count($posts) > 0)
+            {
+                $inc = 0;
+                
+                foreach( $posts as $row => $post)
+                {
+                    $inc++;
+                    if($inc % 2 == 1)
+                    {
+                        echo '<div class="postlight">';
+                        echo '<h1 class="header">'.$post['title'].'</h1>';
+                        echo '<small class="smalltext">Posted on '.$post['time_posted'].' by '.$post['author'].'</small>';
+                        echo '<p>'.$post['content'].'</p>';
+                        echo '</div>';
+                    }
+                    else
+                    {
+                        echo '<div class="postdark">';
+                        echo '<h1 class="header">'.$post['title'].'</h1>';
+                        echo '<small class="smalltext">Posted on '.$post['time_posted'].' by '.$post['author'].'</small>';
+                        echo '<p>'.$post['content'].'</p>';
+                        echo '</div>';
+                    }
+                }
+            }
+            else
+            {
+                echo "No posts were found";
+            }
+            
+            //Close the database connection and related objects
+            $posts = null;
+            $stmt = null;
+            $pdo = null;
+        }
+        catch (PDOException $e)
+        {
+            //If something goes wrong while interacting with the database, we will give an error
+            echo "The database is not currently available, please check back later<br/>";
+            die();
+        }
+    ?>
 </html>
