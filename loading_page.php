@@ -34,9 +34,19 @@
     
     
     <?php
+        //Common elements referenced by java script
+        echo '<p id="Server">Connected on web</p>';
+        
+    
         if(isset($_GET["steamid"]) && isset($_GET["mapname"]))
         {
             //Connected through game
+            
+            //Game specific elements referenced by java script
+            echo '<p id="Map">Error</p>';
+            echo '<p id="FileLoad">Error</p>';
+            echo '<p id="FileStatus">Error</p>';
+            
             //include the information in steam.php. Assuming steam.php is located in parent directory.
             include '../steam.php';
             
@@ -50,11 +60,7 @@
         else
         {
             //Connected through web
+            
         }
-        
-        echo '<p id="Server">Test server name</p>';
-        echo '<p id="Map">Test map name</p>';
-        echo '<p id="FileLoad">Test file load</p>';
-        echo '<p id="FileStatus">Test file status</p>';
     ?>
 </html>
