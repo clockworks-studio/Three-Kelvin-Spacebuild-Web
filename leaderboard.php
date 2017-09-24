@@ -34,11 +34,11 @@
 	</head>
 	
 	<?php
-        ///Database connection
-    
-        //Database information (assuming database.php is located in parent directory)
+        //Import database information and helper functions (assuming database.php and functions.php is located in parent directory)
 		require '../database.php';
+        require '../functions.php';
 		
+        ///Database connection
         try
         {
             //Try to get a connection
@@ -69,24 +69,18 @@
                     {
                         if($inc == 1)
                         {
-                            echo "<tr> <td class='darkleft'>".pad($inc)."] </td> <td class='darkleft'>";
+                            echo "<tr> <td class='darkleft'>".pad($inc)."] </td> <td class='darkleft'>" . colorNamr($user['nick_name'], $user['team']) . "</td>";
                         }
                         else
                         {
-                            echo "<tr> <td class='darkleft'>".pad($inc)."] </td> <td class='darkleft'>";
+                            echo "<tr> <td class='darkleft'>".pad($inc)."] </td> <td class='darkleft'>" . colorNamr($user['nick_name'], $user['team']) . "</td>";
                         }
-                        colorNamr($user['nick_name'], $user['team']);
-                        echo "</td> <td class='darkright'>".number_format($user['score'])."</td> <td class='darkright'>";
-                        formatTime($user['playtime']);
-                        echo "</td> </tr>";
+                        echo "<td class='darkright'>".number_format($user['score'])."</td> <td class='darkright'>" . formatTime($user['playtime']) . "</td> </tr>";
                     }
                     else
                     {
-                        echo "<tr> <td class='lightleft'>".pad($inc)."] </td> <td class='lightleft'>";
-                        colorNamr($user['nick_name'], $user['team']);
-                        echo "</td> <td class='lightright'>".number_format($user['score'])."</td> <td class='lightright'>";
-                        formatTime($user['playtime']);
-                        echo "</td> </tr>";
+                        echo "<tr> <td class='lightleft'>".pad($inc)."] </td> <td class='lightleft'>" . colorNamr($user['nick_name'], $user['team']) . "</td>";
+                        echo "<td class='lightright'>".number_format($user['score'])."</td> <td class='lightright'>" . formatTime($user['playtime']) . "</td> </tr>";
                     }
                 }
                 
@@ -110,76 +104,5 @@
             echo "Leaderboard is not currently available, please check back later<br/>";
             die();
         }
-		
-        ///Functions
-        
-		function colorNamr($name, $faction)
-        {
-            switch ($faction)
-            {
-            case 1:
-                echo '<span style="color:#F4EEF4;">'.$name;
-                break;
-            case 2:
-                echo '<span style="color:#FAAF32;">'.$name;
-                break;
-            case 3:
-                echo '<span style="color:#4B4BEB;">'.$name;
-                break;
-            case 4:
-                echo '<span style="color:#afeb4b;">'.$name;
-                break;
-            case 5:
-                echo '<span style="color:#c84b4b;">'.$name;
-                break;
-            default:
-                echo '<span style="color:#FFFFFF;">'.$name;
-            }
-		}
-		
-		function pad($num)
-        {
-			if($num < 10)
-            {
-				return "0".$num;
-			}
-			else
-            {
-				return (string)$num;
-			}
-		}
-		
-		function formatTime($time)
-        {
-            if($time == 0)
-            {
-                echo "0 minutes";
-                return;
-            }
-            
-			$days = floor($time / 1440);
-			$hours = floor(($time - ($days * 1440)) / 60);
-			$mins = floor(($time - ($days * 1440) - ($hours * 60)));
-			
-            $string = "";
-            
-			if($days > 0)
-            {
-                $string .= $days." ";
-                $string .= $days == 1 ? "day" : "days";
-			}
-			if($hours > 0)
-            {
-                $string .= " ".$hours." ";
-                $string .= $hours == 1 ? "hour" : "hours";
-			}
-			if($mins > 0)
-            {
-                $string .= " ".$mins." ";
-                $string .= $mins == 1 ? "minute" : "minutes";
-			}
-            
-            echo $string.'<br/>';
-		}
 	?>
 </html>
